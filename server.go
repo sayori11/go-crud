@@ -14,25 +14,25 @@ type Product struct {
 	Price uint   `json:"price" gorm:"default: 400"`
 }
 
-func getDB() (*gorm.DB, error) {
+func getDB() *gorm.DB {
 	dsn := "host=localhost user=postgres password=password dbname=postgres port=5433 sslmode=disable"
 	db, err := gorm.Open(postgres.Open(dsn), &gorm.Config{})
 	db.AutoMigrate(&Product{})
 	if err != nil {
 		panic("Failed to connect to db")
 	}
-	return db, nil
+	return db
 }
 
 func getProducts(c echo.Context) error {
-	db, _ := getDB()
+	db := getDB()
 	products := []Product{}
 	db.Find(&products)
 	return c.JSON(http.StatusOK, map[string]interface{}{"data": products})
 }
 
 func insertProduct(c echo.Context) error {
-	db, _ := getDB()
+	db := getDB()
 	var p Product
 	if err := c.Bind(&p); err != nil {
 		return c.String(http.StatusBadRequest, "bad request")
@@ -42,7 +42,7 @@ func insertProduct(c echo.Context) error {
 }
 
 func retrieveProduct(c echo.Context) error {
-	db, _ := getDB()
+	db := getDB()
 	id := c.Param("id")
 	var product Product
 	result := db.First(&product, id)
@@ -53,7 +53,7 @@ func retrieveProduct(c echo.Context) error {
 }
 
 func deleteProduct(c echo.Context) error {
-	db, _ := getDB()
+	db := getDB()
 	id := c.Param("id")
 	var product Product
 	db.Delete(&product, id)
@@ -61,7 +61,7 @@ func deleteProduct(c echo.Context) error {
 }
 
 func updateProduct(c echo.Context) error {
-	db, _ := getDB()
+	db := getDB()
 	id := c.Param("id")
 	var p Product
 	if err := c.Bind(&p); err != nil {
