@@ -71,6 +71,10 @@ func updateProduct(c echo.Context) error {
 	return c.JSON(http.StatusCreated, map[string]interface{}{"data": p})
 }
 
+func Sum[T int | float64](x T, y T) T {
+	return x + y
+}
+
 func main() {
 	e := echo.New()
 	e.GET("/", func(c echo.Context) error {
