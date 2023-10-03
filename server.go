@@ -3,15 +3,29 @@ package main
 import (
 	"net/http"
 
+	"github.com/go-playground/validator"
 	"github.com/labstack/echo/v4"
 	"gorm.io/driver/postgres"
 	"gorm.io/gorm"
 )
 
-type Product struct {
-	gorm.Model
-	Code  string `json:"code"`
-	Price uint   `json:"price" gorm:"default: 400"`
+type (
+	Product struct {
+		gorm.Model
+		Code  string `json:"code" validate:"required"`
+		Price uint   `json:"price" validate:"required,gte=0,lte=500"`
+	}
+	CustomValidator struct {
+		validator *validator.Validate
+	}
+)
+
+func (cv *CustomValidator) Validate(i interface{}) error {
+	if err := cv.validator.Struct(i); err != nil {
+		// Optionally, you could return the error to give each route more control over the status code
+		return echo.NewHTTPError(http.StatusBadRequest, err.Error())
+	}
+	return nil
 }
 
 func getDB() *gorm.DB {
@@ -36,6 +50,9 @@ func insertProduct(c echo.Context) error {
 	var p Product
 	if err := c.Bind(&p); err != nil {
 		return c.String(http.StatusBadRequest, "bad request")
+	}
+	if err := c.Validate(p); err != nil {
+		return err
 	}
 	db.Create(&p)
 	return c.JSON(http.StatusCreated, p)
@@ -67,6 +84,9 @@ func updateProduct(c echo.Context) error {
 	if err := c.Bind(&p); err != nil {
 		return c.String(http.StatusBadRequest, "bad request")
 	}
+	if err := c.Validate(p); err != nil {
+		return err
+	}
 	db.First(&Product{}, id).Updates(&p)
 	return c.JSON(http.StatusCreated, map[string]interface{}{"data": p})
 }
@@ -77,6 +97,7 @@ func Sum[T int | float64](x T, y T) T {
 
 func main() {
 	e := echo.New()
+	e.Validator = &CustomValidator{validator: validator.New()}
 	e.GET("/", func(c echo.Context) error {
 		return c.String(http.StatusOK, "Hello, World!")
 	})
