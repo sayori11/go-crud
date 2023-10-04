@@ -1,0 +1,188 @@
+basePath: /
+definitions:
+  gorm.DeletedAt:
+    properties:
+      time:
+        type: string
+      valid:
+        description: Valid is true if Time is not NULL
+        type: boolean
+    type: object
+  main.DataResponse-array_main_Product:
+    properties:
+      data:
+        items:
+          $ref: '#/definitions/main.Product'
+        type: array
+    type: object
+  main.DataResponse-main_Product:
+    properties:
+      data:
+        $ref: '#/definitions/main.Product'
+    type: object
+  main.DataResponse-string:
+    properties:
+      data:
+        type: string
+    type: object
+  main.ErrorResponse:
+    properties:
+      error:
+        type: string
+    type: object
+  main.Product:
+    properties:
+      code:
+        example: A45
+        type: string
+      createdAt:
+        type: string
+      deletedAt:
+        $ref: '#/definitions/gorm.DeletedAt'
+      id:
+        type: integer
+      price:
+        example: 200
+        maximum: 500
+        minimum: 0
+        type: integer
+      updatedAt:
+        type: string
+    required:
+    - code
+    - price
+    type: object
+  main.ProductCreate:
+    properties:
+      code:
+        example: A45
+        type: string
+      price:
+        example: 200
+        maximum: 500
+        minimum: 0
+        type: integer
+    required:
+    - code
+    - price
+    type: object
+host: localhost:1323
+info:
+  contact: {}
+  description: Test API
+  title: Products API
+  version: "1.0"
+paths:
+  /products:
+    get:
+      consumes:
+      - '*/*'
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/main.DataResponse-array_main_Product'
+      summary: Get a list of products
+      tags:
+      - Products
+    post:
+      consumes:
+      - application/json
+      parameters:
+      - description: Product Body
+        in: body
+        name: object
+        required: true
+        schema:
+          $ref: '#/definitions/main.ProductCreate'
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/main.DataResponse-main_Product'
+        "400":
+          description: Bad Request
+          schema:
+            $ref: '#/definitions/main.ErrorResponse'
+      summary: Insert a product
+      tags:
+      - Products
+  /products/{id}:
+    delete:
+      consumes:
+      - '*/*'
+      parameters:
+      - description: Product ID
+        in: path
+        name: id
+        required: true
+        type: integer
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/main.DataResponse-string'
+      summary: Delete a product
+      tags:
+      - Products
+    get:
+      consumes:
+      - '*/*'
+      parameters:
+      - description: Product ID
+        in: path
+        name: id
+        required: true
+        type: integer
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/main.DataResponse-main_Product'
+        "400":
+          description: Bad Request
+          schema:
+            $ref: '#/definitions/main.ErrorResponse'
+      summary: Retrieve a product
+      tags:
+      - Products
+    put:
+      consumes:
+      - application/json
+      parameters:
+      - description: Product ID
+        in: path
+        name: id
+        required: true
+        type: integer
+      - description: product body
+        in: body
+        name: object
+        required: true
+        schema:
+          $ref: '#/definitions/main.ProductCreate'
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/main.DataResponse-main_Product'
+        "400":
+          description: Bad Request
+          schema:
+            $ref: '#/definitions/main.ErrorResponse'
+      summary: Update a product
+      tags:
+      - Products
+schemes:
+- http
+swagger: "2.0"
