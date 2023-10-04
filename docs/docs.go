@@ -31,7 +31,13 @@ const docTemplate = `{
                     "200": {
                         "description": "OK",
                         "schema": {
-                            "$ref": "#/definitions/main.DataResponse-array_main_Product"
+                            "$ref": "#/definitions/model.DataResponse-array_Product"
+                        }
+                    },
+                    "400": {
+                        "description": "Bad Request",
+                        "schema": {
+                            "$ref": "#/definitions/model.ErrorResponse"
                         }
                     }
                 }
@@ -50,25 +56,25 @@ const docTemplate = `{
                 "parameters": [
                     {
                         "description": "Product Body",
-                        "name": "object",
+                        "name": "product",
                         "in": "body",
                         "required": true,
                         "schema": {
-                            "$ref": "#/definitions/main.ProductCreate"
+                            "$ref": "#/definitions/model.ProductCreate"
                         }
                     }
                 ],
                 "responses": {
-                    "200": {
-                        "description": "OK",
+                    "201": {
+                        "description": "Created",
                         "schema": {
-                            "$ref": "#/definitions/main.DataResponse-main_Product"
+                            "$ref": "#/definitions/model.DataResponse-Product"
                         }
                     },
                     "400": {
                         "description": "Bad Request",
                         "schema": {
-                            "$ref": "#/definitions/main.ErrorResponse"
+                            "$ref": "#/definitions/model.ErrorResponse"
                         }
                     }
                 }
@@ -99,13 +105,13 @@ const docTemplate = `{
                     "200": {
                         "description": "OK",
                         "schema": {
-                            "$ref": "#/definitions/main.DataResponse-main_Product"
+                            "$ref": "#/definitions/model.DataResponse-Product"
                         }
                     },
                     "400": {
                         "description": "Bad Request",
                         "schema": {
-                            "$ref": "#/definitions/main.ErrorResponse"
+                            "$ref": "#/definitions/model.ErrorResponse"
                         }
                     }
                 }
@@ -131,11 +137,11 @@ const docTemplate = `{
                     },
                     {
                         "description": "product body",
-                        "name": "object",
+                        "name": "product",
                         "in": "body",
                         "required": true,
                         "schema": {
-                            "$ref": "#/definitions/main.ProductCreate"
+                            "$ref": "#/definitions/model.ProductCreate"
                         }
                     }
                 ],
@@ -143,13 +149,13 @@ const docTemplate = `{
                     "200": {
                         "description": "OK",
                         "schema": {
-                            "$ref": "#/definitions/main.DataResponse-main_Product"
+                            "$ref": "#/definitions/model.DataResponse-string"
                         }
                     },
                     "400": {
                         "description": "Bad Request",
                         "schema": {
-                            "$ref": "#/definitions/main.ErrorResponse"
+                            "$ref": "#/definitions/model.ErrorResponse"
                         }
                     }
                 }
@@ -178,7 +184,13 @@ const docTemplate = `{
                     "200": {
                         "description": "OK",
                         "schema": {
-                            "$ref": "#/definitions/main.DataResponse-string"
+                            "$ref": "#/definitions/model.DataResponse-string"
+                        }
+                    },
+                    "400": {
+                        "description": "Bad Request",
+                        "schema": {
+                            "$ref": "#/definitions/model.ErrorResponse"
                         }
                     }
                 }
@@ -198,26 +210,26 @@ const docTemplate = `{
                 }
             }
         },
-        "main.DataResponse-array_main_Product": {
+        "model.DataResponse-Product": {
+            "type": "object",
+            "properties": {
+                "data": {
+                    "$ref": "#/definitions/model.Product"
+                }
+            }
+        },
+        "model.DataResponse-array_Product": {
             "type": "object",
             "properties": {
                 "data": {
                     "type": "array",
                     "items": {
-                        "$ref": "#/definitions/main.Product"
+                        "$ref": "#/definitions/model.Product"
                     }
                 }
             }
         },
-        "main.DataResponse-main_Product": {
-            "type": "object",
-            "properties": {
-                "data": {
-                    "$ref": "#/definitions/main.Product"
-                }
-            }
-        },
-        "main.DataResponse-string": {
+        "model.DataResponse-string": {
             "type": "object",
             "properties": {
                 "data": {
@@ -225,7 +237,7 @@ const docTemplate = `{
                 }
             }
         },
-        "main.ErrorResponse": {
+        "model.ErrorResponse": {
             "type": "object",
             "properties": {
                 "error": {
@@ -233,7 +245,7 @@ const docTemplate = `{
                 }
             }
         },
-        "main.Product": {
+        "model.Product": {
             "type": "object",
             "required": [
                 "code",
@@ -264,7 +276,7 @@ const docTemplate = `{
                 }
             }
         },
-        "main.ProductCreate": {
+        "model.ProductCreate": {
             "type": "object",
             "required": [
                 "code",

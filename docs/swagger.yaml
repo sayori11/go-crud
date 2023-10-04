@@ -8,29 +8,29 @@ definitions:
         description: Valid is true if Time is not NULL
         type: boolean
     type: object
-  main.DataResponse-array_main_Product:
+  model.DataResponse-Product:
+    properties:
+      data:
+        $ref: '#/definitions/model.Product'
+    type: object
+  model.DataResponse-array_Product:
     properties:
       data:
         items:
-          $ref: '#/definitions/main.Product'
+          $ref: '#/definitions/model.Product'
         type: array
     type: object
-  main.DataResponse-main_Product:
-    properties:
-      data:
-        $ref: '#/definitions/main.Product'
-    type: object
-  main.DataResponse-string:
+  model.DataResponse-string:
     properties:
       data:
         type: string
     type: object
-  main.ErrorResponse:
+  model.ErrorResponse:
     properties:
       error:
         type: string
     type: object
-  main.Product:
+  model.Product:
     properties:
       code:
         example: A45
@@ -52,7 +52,7 @@ definitions:
     - code
     - price
     type: object
-  main.ProductCreate:
+  model.ProductCreate:
     properties:
       code:
         example: A45
@@ -83,7 +83,11 @@ paths:
         "200":
           description: OK
           schema:
-            $ref: '#/definitions/main.DataResponse-array_main_Product'
+            $ref: '#/definitions/model.DataResponse-array_Product'
+        "400":
+          description: Bad Request
+          schema:
+            $ref: '#/definitions/model.ErrorResponse'
       summary: Get a list of products
       tags:
       - Products
@@ -93,21 +97,21 @@ paths:
       parameters:
       - description: Product Body
         in: body
-        name: object
+        name: product
         required: true
         schema:
-          $ref: '#/definitions/main.ProductCreate'
+          $ref: '#/definitions/model.ProductCreate'
       produces:
       - application/json
       responses:
-        "200":
-          description: OK
+        "201":
+          description: Created
           schema:
-            $ref: '#/definitions/main.DataResponse-main_Product'
+            $ref: '#/definitions/model.DataResponse-Product'
         "400":
           description: Bad Request
           schema:
-            $ref: '#/definitions/main.ErrorResponse'
+            $ref: '#/definitions/model.ErrorResponse'
       summary: Insert a product
       tags:
       - Products
@@ -127,7 +131,11 @@ paths:
         "200":
           description: OK
           schema:
-            $ref: '#/definitions/main.DataResponse-string'
+            $ref: '#/definitions/model.DataResponse-string'
+        "400":
+          description: Bad Request
+          schema:
+            $ref: '#/definitions/model.ErrorResponse'
       summary: Delete a product
       tags:
       - Products
@@ -146,11 +154,11 @@ paths:
         "200":
           description: OK
           schema:
-            $ref: '#/definitions/main.DataResponse-main_Product'
+            $ref: '#/definitions/model.DataResponse-Product'
         "400":
           description: Bad Request
           schema:
-            $ref: '#/definitions/main.ErrorResponse'
+            $ref: '#/definitions/model.ErrorResponse'
       summary: Retrieve a product
       tags:
       - Products
@@ -165,21 +173,21 @@ paths:
         type: integer
       - description: product body
         in: body
-        name: object
+        name: product
         required: true
         schema:
-          $ref: '#/definitions/main.ProductCreate'
+          $ref: '#/definitions/model.ProductCreate'
       produces:
       - application/json
       responses:
         "200":
           description: OK
           schema:
-            $ref: '#/definitions/main.DataResponse-main_Product'
+            $ref: '#/definitions/model.DataResponse-string'
         "400":
           description: Bad Request
           schema:
-            $ref: '#/definitions/main.ErrorResponse'
+            $ref: '#/definitions/model.ErrorResponse'
       summary: Update a product
       tags:
       - Products
