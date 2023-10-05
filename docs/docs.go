@@ -326,7 +326,7 @@ const docTemplate = `{
         "model.ErrorResponse": {
             "type": "object",
             "properties": {
-                "error": {
+                "message": {
                     "type": "string"
                 }
             }

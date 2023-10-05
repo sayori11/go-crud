@@ -32,7 +32,7 @@ definitions:
     type: object
   model.ErrorResponse:
     properties:
-      error:
+      message:
         type: string
     type: object
   model.Product:

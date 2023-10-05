@@ -1,7 +1,9 @@
 package handler
 
 import (
+	"errors"
 	"net/http"
+	"server/helpers"
 	"server/model"
 	"server/service"
 	"strconv"
@@ -29,7 +31,7 @@ func NewProductHandler(svc service.IProductService) *ProductHandler {
 func (h *ProductHandler) GetProducts(c echo.Context) error {
 	products, err := h.svc.GetProducts()
 	if err != nil {
-		return c.JSON(http.StatusBadRequest, model.ErrorResponse{Error: err.Error()})
+		return helpers.ErrorWrap(err, http.StatusBadRequest)
 	}
 	return c.JSON(http.StatusOK, model.DataResponse[[]model.Product]{Data: products})
 }
@@ -45,14 +47,14 @@ func (h *ProductHandler) GetProducts(c echo.Context) error {
 func (h *ProductHandler) InsertProduct(c echo.Context) error {
 	p := model.Product{}
 	if err := c.Bind(&p); err != nil {
-		return c.JSON(http.StatusBadRequest, model.ErrorResponse{Error: "Binding error"})
+		return helpers.ErrorWrap(err, http.StatusBadRequest)
 	}
 	if err := c.Validate(p); err != nil {
-		return c.JSON(http.StatusBadRequest, model.ErrorResponse{Error: err.Error()})
+		return helpers.ErrorWrap(err, http.StatusUnprocessableEntity)
 	}
 	product, err := h.svc.InsertProduct(p)
 	if err != nil {
-		return c.JSON(http.StatusBadRequest, model.ErrorResponse{Error: err.Error()})
+		return helpers.ErrorWrap(err, http.StatusBadRequest)
 	}
 	return c.JSON(http.StatusCreated, model.DataResponse[model.Product]{Data: product})
 }
@@ -68,11 +70,11 @@ func (h *ProductHandler) InsertProduct(c echo.Context) error {
 func (h *ProductHandler) RetrieveProduct(c echo.Context) error {
 	id, err := strconv.Atoi(c.Param("id"))
 	if err != nil {
-		c.JSON(http.StatusBadRequest, model.ErrorResponse{Error: "ID should be an integer"})
+		return helpers.ErrorWrap(errors.New("id should be an integer"), http.StatusBadRequest)
 	}
 	product, err := h.svc.RetrieveProduct(int(id))
 	if err != nil {
-		return c.JSON(http.StatusBadRequest, model.ErrorResponse{Error: err.Error()})
+		return helpers.ErrorWrap(err, http.StatusBadRequest)
 	}
 	return c.JSON(http.StatusOK, model.DataResponse[model.Product]{Data: product})
 }
@@ -88,10 +90,10 @@ func (h *ProductHandler) RetrieveProduct(c echo.Context) error {
 func (h *ProductHandler) DeleteProduct(c echo.Context) error {
 	id, err := strconv.Atoi(c.Param("id"))
 	if err != nil {
-		return c.JSON(http.StatusBadRequest, model.ErrorResponse{Error: "ID should be an integer"})
+		return helpers.ErrorWrap(errors.New("id should be an integer"), http.StatusBadRequest)
 	}
 	if err := h.svc.DeleteProduct(id); err != nil {
-		return c.JSON(http.StatusBadRequest, model.ErrorResponse{Error: err.Error()})
+		return helpers.ErrorWrap(err, http.StatusBadRequest)
 	}
 	return c.JSON(http.StatusOK, model.DataResponse[string]{Data: "Deleted successfully"})
 }
@@ -108,18 +110,18 @@ func (h *ProductHandler) DeleteProduct(c echo.Context) error {
 func (h *ProductHandler) UpdateProduct(c echo.Context) error {
 	id, err := strconv.Atoi(c.Param("id"))
 	if err != nil {
-		return c.JSON(http.StatusBadRequest, model.ErrorResponse{Error: "ID should be an integer"})
+		return helpers.ErrorWrap(errors.New("id should be an integer"), http.StatusBadRequest)
 	}
 	p := model.Product{}
 	if err := c.Bind(&p); err != nil {
-		return c.JSON(http.StatusBadRequest, model.ErrorResponse{Error: "Binding error"})
+		return helpers.ErrorWrap(err, http.StatusBadRequest)
 	}
 	if err := c.Validate(p); err != nil {
-		return c.JSON(http.StatusBadRequest, model.ErrorResponse{Error: err.Error()})
+		return helpers.ErrorWrap(err, http.StatusUnprocessableEntity)
 	}
 
 	if err := h.svc.UpdateProduct(id, p); err != nil {
-		return c.JSON(http.StatusBadRequest, model.ErrorResponse{Error: err.Error()})
+		return helpers.ErrorWrap(err, http.StatusBadRequest)
 	}
 	return c.JSON(http.StatusOK, model.DataResponse[string]{Data: "Updated successfully"})
 }

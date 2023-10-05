@@ -2,6 +2,7 @@ package handler
 
 import (
 	"net/http"
+	"server/helpers"
 	"server/model"
 	"server/service"
 
@@ -27,14 +28,14 @@ func NewUserHandler(svc service.IUserService) *UserHandler {
 func (h *UserHandler) Register(c echo.Context) error {
 	u := model.User{}
 	if err := c.Bind(&u); err != nil {
-		return c.JSON(http.StatusBadRequest, model.ErrorResponse{Error: "Binding error"})
+		return helpers.ErrorWrap(err, http.StatusBadRequest)
 	}
 	if err := c.Validate(u); err != nil {
-		return c.JSON(http.StatusBadRequest, model.ErrorResponse{Error: err.Error()})
+		return helpers.ErrorWrap(err, http.StatusUnprocessableEntity)
 	}
 	user, err := h.svc.Register(u)
 	if err != nil {
-		return c.JSON(http.StatusBadRequest, model.ErrorResponse{Error: err.Error()})
+		return helpers.ErrorWrap(err, http.StatusBadRequest)
 	}
 	return c.JSON(http.StatusCreated, model.DataResponse[model.User]{Data: user})
 }
@@ -50,15 +51,15 @@ func (h *UserHandler) Register(c echo.Context) error {
 func (h *UserHandler) Login(c echo.Context) error {
 	u := model.UserCreate{}
 	if err := c.Bind(&u); err != nil {
-		return c.JSON(http.StatusBadRequest, model.ErrorResponse{Error: "Binding error"})
+		return helpers.ErrorWrap(err, http.StatusBadRequest)
 	}
 	if err := c.Validate(u); err != nil {
-		return c.JSON(http.StatusBadRequest, model.ErrorResponse{Error: err.Error()})
+		return helpers.ErrorWrap(err, http.StatusUnprocessableEntity)
 	}
 
 	token, err := h.svc.Login(u)
 	if err != nil {
-		return c.JSON(http.StatusBadRequest, model.ErrorResponse{Error: err.Error()})
+		return helpers.ErrorWrap(err, http.StatusBadRequest)
 	}
 
 	return c.JSON(http.StatusOK, model.TokenResponse{Token: token})

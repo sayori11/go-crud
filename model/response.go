@@ -8,6 +8,6 @@ type (
 		Data T `json:"data"`
 	}
 	ErrorResponse struct {
-		Error string `json:"error"`
+		Message string `json:"message"`
 	}
 )
