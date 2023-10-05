@@ -16,16 +16,16 @@ func (repo *PGRepository) CreateUser(user model.User) (model.User, error) {
 	return user, nil
 }
 
-func (repo *PGRepository) ValidateUser(user model.UserCreate) error {
+func (repo *PGRepository) ValidateUser(user model.UserCreate) (model.User, error) {
 	db := repo.DB
 	userDB := model.User{}
 	if result := db.First(&userDB, "username = ?", user.Username); result.Error != nil {
-		return errors.New("incorrect username")
+		return model.User{}, errors.New("incorrect username")
 	}
 
 	if err := bcrypt.CompareHashAndPassword([]byte(userDB.Password), []byte(user.Password)); err != nil {
-		return errors.New("incorrect password")
+		return model.User{}, errors.New("incorrect password")
 	}
 
-	return nil
+	return userDB, nil
 }

@@ -1,3 +1,4 @@
+//lint:file-ignore U1000 Wait
 package main
 
 import (
@@ -9,6 +10,8 @@ import (
 	"server/service"
 
 	"github.com/go-playground/validator"
+	"github.com/golang-jwt/jwt/v4"
+	echojwt "github.com/labstack/echo-jwt"
 	"github.com/labstack/echo/v4"
 	echoSwagger "github.com/swaggo/echo-swagger"
 )
@@ -27,10 +30,16 @@ type (
 	}
 )
 
+type jwtCustomClaims struct {
+	id       int
+	username string
+	jwt.RegisteredClaims
+}
+
 func (cv *CustomValidator) Validate(i interface{}) error {
 	if err := cv.validator.Struct(i); err != nil {
 		// Optionally, you could return the error to give each route more control over the status code
-		return echo.NewHTTPError(http.StatusBadRequest, err.Error())
+		return echo.NewHTTPError(http.StatusUnprocessableEntity, err.Error())
 	}
 	return nil
 }
@@ -50,6 +59,13 @@ func main() {
 	pgRepo := repository.NewPGRepository()
 	productSvc := service.NewProductService(pgRepo)
 	productHandler := handler.NewProductHandler(productSvc)
+	config := echojwt.Config{
+		NewClaimsFunc: func(c echo.Context) jwt.Claims {
+			return new(jwtCustomClaims)
+		},
+		SigningKey: []byte("secret"),
+	}
+	p.Use(echojwt.WithConfig(config))
 	p.GET("/:id", productHandler.RetrieveProduct)
 	p.GET("", productHandler.GetProducts)
 	p.POST("", productHandler.InsertProduct)

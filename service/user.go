@@ -5,7 +5,7 @@ import (
 	"server/repository"
 	"time"
 
-	"github.com/golang-jwt/jwt/v5"
+	"github.com/golang-jwt/jwt/v4"
 	"golang.org/x/crypto/bcrypt"
 )
 
@@ -14,6 +14,7 @@ type UserService struct {
 }
 
 type jwtCustomClaims struct {
+	id       uint
 	username string
 	jwt.RegisteredClaims
 }
@@ -28,16 +29,20 @@ func (svc UserService) Register(user model.User) (model.User, error) {
 		return model.User{}, err
 	}
 	user.Password = string(hash)
-	return svc.repo.CreateUser(user)
+	u, err := svc.repo.CreateUser(user)
+	u.Password = ""
+	return u, err
+
 }
 
 func (svc UserService) Login(user model.UserCreate) (string, error) {
-	err := svc.repo.ValidateUser(user)
+	u, err := svc.repo.ValidateUser(user)
 	if err != nil {
 		return "", err
 	}
 	claims := &jwtCustomClaims{
-		user.Username,
+		u.ID,
+		u.Username,
 		jwt.RegisteredClaims{
 			ExpiresAt: jwt.NewNumericDate(time.Now().Add(time.Hour * 72)),
 		},

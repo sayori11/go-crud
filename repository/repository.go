@@ -9,5 +9,5 @@ type IRepository interface {
 	RetrieveProduct(int) (model.Product, error)
 	DeleteProduct(int) error
 	CreateUser(model.User) (model.User, error)
-	ValidateUser(model.UserCreate) error
+	ValidateUser(model.UserCreate) (model.User, error)
 }
