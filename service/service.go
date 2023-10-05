@@ -12,5 +12,5 @@ type IProductService interface {
 
 type IUserService interface {
 	Register(model.User) (model.User, error)
-	Login(model.UserCreate) error
+	Login(model.UserCreate) (string, error)
 }

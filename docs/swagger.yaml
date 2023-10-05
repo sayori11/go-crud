@@ -71,6 +71,11 @@ definitions:
     - code
     - price
     type: object
+  model.TokenResponse:
+    properties:
+      token:
+        type: string
+    type: object
   model.User:
     properties:
       createdAt:
@@ -106,6 +111,31 @@ info:
   title: Products API
   version: "1.0"
 paths:
+  /login:
+    post:
+      consumes:
+      - application/json
+      parameters:
+      - description: User Body
+        in: body
+        name: user
+        required: true
+        schema:
+          $ref: '#/definitions/model.UserCreate'
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/model.TokenResponse'
+        "400":
+          description: Bad Request
+          schema:
+            $ref: '#/definitions/model.ErrorResponse'
+      summary: Login
+      tags:
+      - User
   /products:
     get:
       consumes:

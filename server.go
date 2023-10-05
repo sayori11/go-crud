@@ -60,6 +60,7 @@ func main() {
 	userSvc := service.NewUserService(pgRepo)
 	userHandler := handler.NewUserHandler(userSvc)
 	u.POST("register", userHandler.Register)
+	u.POST("login", userHandler.Login)
 
 	e.GET("/swagger/*", echoSwagger.EchoWrapHandler())
 	e.Logger.Fatal(e.Start(":1323"))
