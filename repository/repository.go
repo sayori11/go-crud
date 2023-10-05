@@ -8,4 +8,6 @@ type IRepository interface {
 	UpdateProduct(int, model.Product) error
 	RetrieveProduct(int) (model.Product, error)
 	DeleteProduct(int) error
+	CreateUser(model.User) (model.User, error)
+	ValidateUser(model.User) (bool, error)
 }

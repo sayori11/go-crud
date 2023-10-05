@@ -13,6 +13,11 @@ definitions:
       data:
         $ref: '#/definitions/model.Product'
     type: object
+  model.DataResponse-User:
+    properties:
+      data:
+        $ref: '#/definitions/model.User'
+    type: object
   model.DataResponse-array_Product:
     properties:
       data:
@@ -65,6 +70,34 @@ definitions:
     required:
     - code
     - price
+    type: object
+  model.User:
+    properties:
+      createdAt:
+        type: string
+      deletedAt:
+        $ref: '#/definitions/gorm.DeletedAt'
+      id:
+        type: integer
+      password:
+        type: string
+      updatedAt:
+        type: string
+      username:
+        type: string
+    required:
+    - password
+    - username
+    type: object
+  model.UserCreate:
+    properties:
+      password:
+        type: string
+      username:
+        type: string
+    required:
+    - password
+    - username
     type: object
 host: localhost:1323
 info:
@@ -191,6 +224,31 @@ paths:
       summary: Update a product
       tags:
       - Products
+  /register:
+    post:
+      consumes:
+      - application/json
+      parameters:
+      - description: User Body
+        in: body
+        name: user
+        required: true
+        schema:
+          $ref: '#/definitions/model.UserCreate'
+      produces:
+      - application/json
+      responses:
+        "201":
+          description: Created
+          schema:
+            $ref: '#/definitions/model.DataResponse-User'
+        "400":
+          description: Bad Request
+          schema:
+            $ref: '#/definitions/model.ErrorResponse'
+      summary: Register
+      tags:
+      - User
 schemes:
 - http
 swagger: "2.0"

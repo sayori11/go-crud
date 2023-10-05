@@ -46,14 +46,21 @@ func main() {
 		return c.String(http.StatusOK, "Hello, World!")
 	})
 
+	p := e.Group("/products")
 	pgRepo := repository.NewPGRepository()
 	productSvc := service.NewProductService(pgRepo)
-	h := handler.NewProductHandler(productSvc)
-	e.GET("/products/:id", h.RetrieveProduct)
-	e.GET("/products", h.GetProducts)
-	e.POST("/products", h.InsertProduct)
-	e.DELETE("/products/:id", h.DeleteProduct)
-	e.PUT("/products/:id", h.UpdateProduct)
+	productHandler := handler.NewProductHandler(productSvc)
+	p.GET("/:id", productHandler.RetrieveProduct)
+	p.GET("", productHandler.GetProducts)
+	p.POST("", productHandler.InsertProduct)
+	p.DELETE("/:id", productHandler.DeleteProduct)
+	p.PUT("/:id", productHandler.UpdateProduct)
+
+	u := e.Group("/")
+	userSvc := service.NewUserService(pgRepo)
+	userHandler := handler.NewUserHandler(userSvc)
+	u.POST("register", userHandler.Register)
+
 	e.GET("/swagger/*", echoSwagger.EchoWrapHandler())
 	e.Logger.Fatal(e.Start(":1323"))
 }
