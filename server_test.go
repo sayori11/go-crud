@@ -44,7 +44,7 @@ func RunSumTests[T int | float64](t *testing.T, tests []TestTable[T]) {
 	}
 }
 
-func TestUpdateProducts(t *testing.T) {
+func TestInsertProduct(t *testing.T) {
 	e := echo.New()
 	e.Validator = &CustomValidator{validator: validator.New()}
 	productJSON := `{"code": "N73", "price": 40}`
@@ -61,5 +61,6 @@ func TestUpdateProducts(t *testing.T) {
 	h := handler.NewProductHandler(productSvc)
 	if assert.NoError(t, h.InsertProduct(c)) {
 		assert.Equal(t, http.StatusCreated, rec.Code)
+		assert.Contains(t, rec.Body.String(), "data")
 	}
 }
