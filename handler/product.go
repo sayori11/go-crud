@@ -6,6 +6,7 @@ import (
 	"server/helpers"
 	"server/model"
 	"server/service"
+	"server/view"
 	"strconv"
 
 	"github.com/labstack/echo/v4"
@@ -25,24 +26,24 @@ func NewProductHandler(svc service.IProductService) *ProductHandler {
 // @Tags Products
 // @Accept */*
 // @Produce json
-// @Success 200 {object} model.DataResponse[[]Product]
-// @Failure 400 {object} model.ErrorResponse
+// @Success 200 {object} view.DataResponse[[]model.Product]
+// @Failure 400 {object} view.ErrorResponse
 // @Router /products [get]
 func (h *ProductHandler) GetProducts(c echo.Context) error {
 	products, err := h.svc.GetProducts()
 	if err != nil {
 		return helpers.ErrorWrap(err, http.StatusBadRequest)
 	}
-	return c.JSON(http.StatusOK, model.DataResponse[[]model.Product]{Data: products})
+	return c.JSON(http.StatusOK, view.DataResponse[[]model.Product]{Data: products})
 }
 
 // @Summary Insert a product
 // @Tags Products
 // @Accept json
 // @Produce json
-// @Param product body model.ProductCreate true "Product Body"
-// @Success 201 {object} model.DataResponse[Product]
-// @Failure 400 {object} model.ErrorResponse
+// @Param product body view.ProductCreate true "Product Body"
+// @Success 201 {object} view.DataResponse[model.Product]
+// @Failure 400 {object} view.ErrorResponse
 // @Router /products [post]
 func (h *ProductHandler) InsertProduct(c echo.Context) error {
 	p := model.Product{}
@@ -56,7 +57,7 @@ func (h *ProductHandler) InsertProduct(c echo.Context) error {
 	if err != nil {
 		return helpers.ErrorWrap(err, http.StatusBadRequest)
 	}
-	return c.JSON(http.StatusCreated, model.DataResponse[model.Product]{Data: product})
+	return c.JSON(http.StatusCreated, view.DataResponse[model.Product]{Data: product})
 }
 
 // @Summary Retrieve a product
@@ -64,8 +65,8 @@ func (h *ProductHandler) InsertProduct(c echo.Context) error {
 // @Param id path int true "Product ID"
 // @Accept */*
 // @Produce json
-// @Success 200 {object} model.DataResponse[Product]
-// @Failure 400 {object} model.ErrorResponse
+// @Success 200 {object} view.DataResponse[model.Product]
+// @Failure 400 {object} view.ErrorResponse
 // @Router /products/{id} [get]
 func (h *ProductHandler) RetrieveProduct(c echo.Context) error {
 	id, err := strconv.Atoi(c.Param("id"))
@@ -76,7 +77,7 @@ func (h *ProductHandler) RetrieveProduct(c echo.Context) error {
 	if err != nil {
 		return helpers.ErrorWrap(err, http.StatusBadRequest)
 	}
-	return c.JSON(http.StatusOK, model.DataResponse[model.Product]{Data: product})
+	return c.JSON(http.StatusOK, view.DataResponse[model.Product]{Data: product})
 }
 
 // @Summary Delete a product
@@ -84,8 +85,8 @@ func (h *ProductHandler) RetrieveProduct(c echo.Context) error {
 // @Param id path int true "Product ID"
 // @Accept */*
 // @Produce json
-// @Success 200 {object} model.DataResponse[string]
-// @Failure 400 {object} model.ErrorResponse
+// @Success 200 {object} view.DataResponse[string]
+// @Failure 400 {object} view.ErrorResponse
 // @Router /products/{id} [delete]
 func (h *ProductHandler) DeleteProduct(c echo.Context) error {
 	id, err := strconv.Atoi(c.Param("id"))
@@ -95,7 +96,7 @@ func (h *ProductHandler) DeleteProduct(c echo.Context) error {
 	if err := h.svc.DeleteProduct(id); err != nil {
 		return helpers.ErrorWrap(err, http.StatusBadRequest)
 	}
-	return c.JSON(http.StatusOK, model.DataResponse[string]{Data: "Deleted successfully"})
+	return c.JSON(http.StatusOK, view.DataResponse[string]{Data: "Deleted successfully"})
 }
 
 // @Summary Update a product
@@ -103,9 +104,9 @@ func (h *ProductHandler) DeleteProduct(c echo.Context) error {
 // @Param id path int true "Product ID"
 // @Accept json
 // @Produce json
-// @Param product body model.ProductCreate true "product body"
-// @Success 200 {object} model.DataResponse[string]
-// @Failure 400 {object} model.ErrorResponse
+// @Param product body view.ProductCreate true "product body"
+// @Success 200 {object} view.DataResponse[string]
+// @Failure 400 {object} view.ErrorResponse
 // @Router /products/{id} [put]
 func (h *ProductHandler) UpdateProduct(c echo.Context) error {
 	id, err := strconv.Atoi(c.Param("id"))
@@ -123,5 +124,5 @@ func (h *ProductHandler) UpdateProduct(c echo.Context) error {
 	if err := h.svc.UpdateProduct(id, p); err != nil {
 		return helpers.ErrorWrap(err, http.StatusBadRequest)
 	}
-	return c.JSON(http.StatusOK, model.DataResponse[string]{Data: "Updated successfully"})
+	return c.JSON(http.StatusOK, view.DataResponse[string]{Data: "Updated successfully"})
 }

@@ -24,6 +24,11 @@ import (
 // @BasePath /
 // @schemes http
 
+// @securityDefinitions.apikey Bearer
+// @in header
+// @name Authorization
+// @description Type "Bearer" followed by a space and JWT token.
+
 type (
 	CustomValidator struct {
 		validator *validator.Validate

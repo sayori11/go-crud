@@ -3,6 +3,7 @@ package service
 import (
 	"server/model"
 	"server/repository"
+	"server/view"
 	"time"
 
 	"github.com/golang-jwt/jwt/v4"
@@ -35,7 +36,7 @@ func (svc UserService) Register(user model.User) (model.User, error) {
 
 }
 
-func (svc UserService) Login(user model.UserCreate) (string, error) {
+func (svc UserService) Login(user view.UserCreate) (string, error) {
 	u, err := svc.repo.ValidateUser(user)
 	if err != nil {
 		return "", err

@@ -1,11 +1,6 @@
-package model
+package view
 
-import (
-	"gorm.io/gorm"
-)
-
-type User struct {
-	gorm.Model
+type UserCreate struct {
 	Username string `json:"username" validate:"required" gorm:"unique"`
 	Password string `json:"password,omitempty" validate:"required"`
 }

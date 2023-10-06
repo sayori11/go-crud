@@ -8,33 +8,6 @@ definitions:
         description: Valid is true if Time is not NULL
         type: boolean
     type: object
-  model.DataResponse-Product:
-    properties:
-      data:
-        $ref: '#/definitions/model.Product'
-    type: object
-  model.DataResponse-User:
-    properties:
-      data:
-        $ref: '#/definitions/model.User'
-    type: object
-  model.DataResponse-array_Product:
-    properties:
-      data:
-        items:
-          $ref: '#/definitions/model.Product'
-        type: array
-    type: object
-  model.DataResponse-string:
-    properties:
-      data:
-        type: string
-    type: object
-  model.ErrorResponse:
-    properties:
-      message:
-        type: string
-    type: object
   model.Product:
     properties:
       code:
@@ -57,25 +30,6 @@ definitions:
     - code
     - price
     type: object
-  model.ProductCreate:
-    properties:
-      code:
-        example: A45
-        type: string
-      price:
-        example: 200
-        maximum: 500
-        minimum: 0
-        type: integer
-    required:
-    - code
-    - price
-    type: object
-  model.TokenResponse:
-    properties:
-      token:
-        type: string
-    type: object
   model.User:
     properties:
       createdAt:
@@ -94,7 +48,53 @@ definitions:
     - password
     - username
     type: object
-  model.UserCreate:
+  view.DataResponse-array_model_Product:
+    properties:
+      data:
+        items:
+          $ref: '#/definitions/model.Product'
+        type: array
+    type: object
+  view.DataResponse-model_Product:
+    properties:
+      data:
+        $ref: '#/definitions/model.Product'
+    type: object
+  view.DataResponse-model_User:
+    properties:
+      data:
+        $ref: '#/definitions/model.User'
+    type: object
+  view.DataResponse-string:
+    properties:
+      data:
+        type: string
+    type: object
+  view.ErrorResponse:
+    properties:
+      message:
+        type: string
+    type: object
+  view.ProductCreate:
+    properties:
+      code:
+        example: A45
+        type: string
+      price:
+        example: 200
+        maximum: 500
+        minimum: 0
+        type: integer
+    required:
+    - code
+    - price
+    type: object
+  view.TokenResponse:
+    properties:
+      token:
+        type: string
+    type: object
+  view.UserCreate:
     properties:
       password:
         type: string
@@ -121,18 +121,18 @@ paths:
         name: user
         required: true
         schema:
-          $ref: '#/definitions/model.UserCreate'
+          $ref: '#/definitions/view.UserCreate'
       produces:
       - application/json
       responses:
         "200":
           description: OK
           schema:
-            $ref: '#/definitions/model.TokenResponse'
+            $ref: '#/definitions/view.TokenResponse'
         "400":
           description: Bad Request
           schema:
-            $ref: '#/definitions/model.ErrorResponse'
+            $ref: '#/definitions/view.ErrorResponse'
       summary: Login
       tags:
       - User
@@ -146,11 +146,11 @@ paths:
         "200":
           description: OK
           schema:
-            $ref: '#/definitions/model.DataResponse-array_Product'
+            $ref: '#/definitions/view.DataResponse-array_model_Product'
         "400":
           description: Bad Request
           schema:
-            $ref: '#/definitions/model.ErrorResponse'
+            $ref: '#/definitions/view.ErrorResponse'
       summary: Get a list of products
       tags:
       - Products
@@ -163,18 +163,18 @@ paths:
         name: product
         required: true
         schema:
-          $ref: '#/definitions/model.ProductCreate'
+          $ref: '#/definitions/view.ProductCreate'
       produces:
       - application/json
       responses:
         "201":
           description: Created
           schema:
-            $ref: '#/definitions/model.DataResponse-Product'
+            $ref: '#/definitions/view.DataResponse-model_Product'
         "400":
           description: Bad Request
           schema:
-            $ref: '#/definitions/model.ErrorResponse'
+            $ref: '#/definitions/view.ErrorResponse'
       summary: Insert a product
       tags:
       - Products
@@ -194,11 +194,11 @@ paths:
         "200":
           description: OK
           schema:
-            $ref: '#/definitions/model.DataResponse-string'
+            $ref: '#/definitions/view.DataResponse-string'
         "400":
           description: Bad Request
           schema:
-            $ref: '#/definitions/model.ErrorResponse'
+            $ref: '#/definitions/view.ErrorResponse'
       summary: Delete a product
       tags:
       - Products
@@ -217,11 +217,11 @@ paths:
         "200":
           description: OK
           schema:
-            $ref: '#/definitions/model.DataResponse-Product'
+            $ref: '#/definitions/view.DataResponse-model_Product'
         "400":
           description: Bad Request
           schema:
-            $ref: '#/definitions/model.ErrorResponse'
+            $ref: '#/definitions/view.ErrorResponse'
       summary: Retrieve a product
       tags:
       - Products
@@ -239,18 +239,18 @@ paths:
         name: product
         required: true
         schema:
-          $ref: '#/definitions/model.ProductCreate'
+          $ref: '#/definitions/view.ProductCreate'
       produces:
       - application/json
       responses:
         "200":
           description: OK
           schema:
-            $ref: '#/definitions/model.DataResponse-string'
+            $ref: '#/definitions/view.DataResponse-string'
         "400":
           description: Bad Request
           schema:
-            $ref: '#/definitions/model.ErrorResponse'
+            $ref: '#/definitions/view.ErrorResponse'
       summary: Update a product
       tags:
       - Products
@@ -264,21 +264,27 @@ paths:
         name: user
         required: true
         schema:
-          $ref: '#/definitions/model.UserCreate'
+          $ref: '#/definitions/view.UserCreate'
       produces:
       - application/json
       responses:
         "201":
           description: Created
           schema:
-            $ref: '#/definitions/model.DataResponse-User'
+            $ref: '#/definitions/view.DataResponse-model_User'
         "400":
           description: Bad Request
           schema:
-            $ref: '#/definitions/model.ErrorResponse'
+            $ref: '#/definitions/view.ErrorResponse'
       summary: Register
       tags:
       - User
 schemes:
 - http
+securityDefinitions:
+  Bearer:
+    description: Type "Bearer" followed by a space and JWT token.
+    in: header
+    name: Authorization
+    type: apiKey
 swagger: "2.0"

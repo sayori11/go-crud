@@ -1,10 +1,12 @@
-package model
+package view
+
+import "server/model"
 
 type (
 	TokenResponse struct {
 		Token string `json:"token"`
 	}
-	DataResponse[T Product | []Product | User | string] struct {
+	DataResponse[T model.Product | []model.Product | model.User | string] struct {
 		Data T `json:"data"`
 	}
 	ErrorResponse struct {

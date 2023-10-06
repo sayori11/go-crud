@@ -5,6 +5,7 @@ import (
 	"server/helpers"
 	"server/model"
 	"server/service"
+	"server/view"
 
 	"github.com/labstack/echo/v4"
 )
@@ -21,9 +22,9 @@ func NewUserHandler(svc service.IUserService) *UserHandler {
 // @Tags User
 // @Accept json
 // @Produce json
-// @Param user body model.UserCreate true "User Body"
-// @Success 201 {object} model.DataResponse[User]
-// @Failure 400 {object} model.ErrorResponse
+// @Param user body view.UserCreate true "User Body"
+// @Success 201 {object} view.DataResponse[model.User]
+// @Failure 400 {object} view.ErrorResponse
 // @Router /register [post]
 func (h *UserHandler) Register(c echo.Context) error {
 	u := model.User{}
@@ -37,19 +38,19 @@ func (h *UserHandler) Register(c echo.Context) error {
 	if err != nil {
 		return helpers.ErrorWrap(err, http.StatusBadRequest)
 	}
-	return c.JSON(http.StatusCreated, model.DataResponse[model.User]{Data: user})
+	return c.JSON(http.StatusCreated, view.DataResponse[model.User]{Data: user})
 }
 
 // @Summary Login
 // @Tags User
 // @Accept json
 // @Produce json
-// @Param user body model.UserCreate true "User Body"
-// @Success 200 {object} model.TokenResponse
-// @Failure 400 {object} model.ErrorResponse
+// @Param user body view.UserCreate true "User Body"
+// @Success 200 {object} view.TokenResponse
+// @Failure 400 {object} view.ErrorResponse
 // @Router /login [post]
 func (h *UserHandler) Login(c echo.Context) error {
-	u := model.UserCreate{}
+	u := view.UserCreate{}
 	if err := c.Bind(&u); err != nil {
 		return helpers.ErrorWrap(err, http.StatusBadRequest)
 	}
@@ -62,5 +63,5 @@ func (h *UserHandler) Login(c echo.Context) error {
 		return helpers.ErrorWrap(err, http.StatusBadRequest)
 	}
 
-	return c.JSON(http.StatusOK, model.TokenResponse{Token: token})
+	return c.JSON(http.StatusOK, view.TokenResponse{Token: token})
 }

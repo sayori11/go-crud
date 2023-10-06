@@ -34,7 +34,7 @@ const docTemplate = `{
                         "in": "body",
                         "required": true,
                         "schema": {
-                            "$ref": "#/definitions/model.UserCreate"
+                            "$ref": "#/definitions/view.UserCreate"
                         }
                     }
                 ],
@@ -42,13 +42,13 @@ const docTemplate = `{
                     "200": {
                         "description": "OK",
                         "schema": {
-                            "$ref": "#/definitions/model.TokenResponse"
+                            "$ref": "#/definitions/view.TokenResponse"
                         }
                     },
                     "400": {
                         "description": "Bad Request",
                         "schema": {
-                            "$ref": "#/definitions/model.ErrorResponse"
+                            "$ref": "#/definitions/view.ErrorResponse"
                         }
                     }
                 }
@@ -70,13 +70,13 @@ const docTemplate = `{
                     "200": {
                         "description": "OK",
                         "schema": {
-                            "$ref": "#/definitions/model.DataResponse-array_Product"
+                            "$ref": "#/definitions/view.DataResponse-array_model_Product"
                         }
                     },
                     "400": {
                         "description": "Bad Request",
                         "schema": {
-                            "$ref": "#/definitions/model.ErrorResponse"
+                            "$ref": "#/definitions/view.ErrorResponse"
                         }
                     }
                 }
@@ -99,7 +99,7 @@ const docTemplate = `{
                         "in": "body",
                         "required": true,
                         "schema": {
-                            "$ref": "#/definitions/model.ProductCreate"
+                            "$ref": "#/definitions/view.ProductCreate"
                         }
                     }
                 ],
@@ -107,13 +107,13 @@ const docTemplate = `{
                     "201": {
                         "description": "Created",
                         "schema": {
-                            "$ref": "#/definitions/model.DataResponse-Product"
+                            "$ref": "#/definitions/view.DataResponse-model_Product"
                         }
                     },
                     "400": {
                         "description": "Bad Request",
                         "schema": {
-                            "$ref": "#/definitions/model.ErrorResponse"
+                            "$ref": "#/definitions/view.ErrorResponse"
                         }
                     }
                 }
@@ -144,13 +144,13 @@ const docTemplate = `{
                     "200": {
                         "description": "OK",
                         "schema": {
-                            "$ref": "#/definitions/model.DataResponse-Product"
+                            "$ref": "#/definitions/view.DataResponse-model_Product"
                         }
                     },
                     "400": {
                         "description": "Bad Request",
                         "schema": {
-                            "$ref": "#/definitions/model.ErrorResponse"
+                            "$ref": "#/definitions/view.ErrorResponse"
                         }
                     }
                 }
@@ -180,7 +180,7 @@ const docTemplate = `{
                         "in": "body",
                         "required": true,
                         "schema": {
-                            "$ref": "#/definitions/model.ProductCreate"
+                            "$ref": "#/definitions/view.ProductCreate"
                         }
                     }
                 ],
@@ -188,13 +188,13 @@ const docTemplate = `{
                     "200": {
                         "description": "OK",
                         "schema": {
-                            "$ref": "#/definitions/model.DataResponse-string"
+                            "$ref": "#/definitions/view.DataResponse-string"
                         }
                     },
                     "400": {
                         "description": "Bad Request",
                         "schema": {
-                            "$ref": "#/definitions/model.ErrorResponse"
+                            "$ref": "#/definitions/view.ErrorResponse"
                         }
                     }
                 }
@@ -223,13 +223,13 @@ const docTemplate = `{
                     "200": {
                         "description": "OK",
                         "schema": {
-                            "$ref": "#/definitions/model.DataResponse-string"
+                            "$ref": "#/definitions/view.DataResponse-string"
                         }
                     },
                     "400": {
                         "description": "Bad Request",
                         "schema": {
-                            "$ref": "#/definitions/model.ErrorResponse"
+                            "$ref": "#/definitions/view.ErrorResponse"
                         }
                     }
                 }
@@ -254,7 +254,7 @@ const docTemplate = `{
                         "in": "body",
                         "required": true,
                         "schema": {
-                            "$ref": "#/definitions/model.UserCreate"
+                            "$ref": "#/definitions/view.UserCreate"
                         }
                     }
                 ],
@@ -262,13 +262,13 @@ const docTemplate = `{
                     "201": {
                         "description": "Created",
                         "schema": {
-                            "$ref": "#/definitions/model.DataResponse-User"
+                            "$ref": "#/definitions/view.DataResponse-model_User"
                         }
                     },
                     "400": {
                         "description": "Bad Request",
                         "schema": {
-                            "$ref": "#/definitions/model.ErrorResponse"
+                            "$ref": "#/definitions/view.ErrorResponse"
                         }
                     }
                 }
@@ -285,49 +285,6 @@ const docTemplate = `{
                 "valid": {
                     "description": "Valid is true if Time is not NULL",
                     "type": "boolean"
-                }
-            }
-        },
-        "model.DataResponse-Product": {
-            "type": "object",
-            "properties": {
-                "data": {
-                    "$ref": "#/definitions/model.Product"
-                }
-            }
-        },
-        "model.DataResponse-User": {
-            "type": "object",
-            "properties": {
-                "data": {
-                    "$ref": "#/definitions/model.User"
-                }
-            }
-        },
-        "model.DataResponse-array_Product": {
-            "type": "object",
-            "properties": {
-                "data": {
-                    "type": "array",
-                    "items": {
-                        "$ref": "#/definitions/model.Product"
-                    }
-                }
-            }
-        },
-        "model.DataResponse-string": {
-            "type": "object",
-            "properties": {
-                "data": {
-                    "type": "string"
-                }
-            }
-        },
-        "model.ErrorResponse": {
-            "type": "object",
-            "properties": {
-                "message": {
-                    "type": "string"
                 }
             }
         },
@@ -362,33 +319,6 @@ const docTemplate = `{
                 }
             }
         },
-        "model.ProductCreate": {
-            "type": "object",
-            "required": [
-                "code",
-                "price"
-            ],
-            "properties": {
-                "code": {
-                    "type": "string",
-                    "example": "A45"
-                },
-                "price": {
-                    "type": "integer",
-                    "maximum": 500,
-                    "minimum": 0,
-                    "example": 200
-                }
-            }
-        },
-        "model.TokenResponse": {
-            "type": "object",
-            "properties": {
-                "token": {
-                    "type": "string"
-                }
-            }
-        },
         "model.User": {
             "type": "object",
             "required": [
@@ -416,7 +346,77 @@ const docTemplate = `{
                 }
             }
         },
-        "model.UserCreate": {
+        "view.DataResponse-array_model_Product": {
+            "type": "object",
+            "properties": {
+                "data": {
+                    "type": "array",
+                    "items": {
+                        "$ref": "#/definitions/model.Product"
+                    }
+                }
+            }
+        },
+        "view.DataResponse-model_Product": {
+            "type": "object",
+            "properties": {
+                "data": {
+                    "$ref": "#/definitions/model.Product"
+                }
+            }
+        },
+        "view.DataResponse-model_User": {
+            "type": "object",
+            "properties": {
+                "data": {
+                    "$ref": "#/definitions/model.User"
+                }
+            }
+        },
+        "view.DataResponse-string": {
+            "type": "object",
+            "properties": {
+                "data": {
+                    "type": "string"
+                }
+            }
+        },
+        "view.ErrorResponse": {
+            "type": "object",
+            "properties": {
+                "message": {
+                    "type": "string"
+                }
+            }
+        },
+        "view.ProductCreate": {
+            "type": "object",
+            "required": [
+                "code",
+                "price"
+            ],
+            "properties": {
+                "code": {
+                    "type": "string",
+                    "example": "A45"
+                },
+                "price": {
+                    "type": "integer",
+                    "maximum": 500,
+                    "minimum": 0,
+                    "example": 200
+                }
+            }
+        },
+        "view.TokenResponse": {
+            "type": "object",
+            "properties": {
+                "token": {
+                    "type": "string"
+                }
+            }
+        },
+        "view.UserCreate": {
             "type": "object",
             "required": [
                 "password",
@@ -430,6 +430,14 @@ const docTemplate = `{
                     "type": "string"
                 }
             }
+        }
+    },
+    "securityDefinitions": {
+        "Bearer": {
+            "description": "Type \"Bearer\" followed by a space and JWT token.",
+            "type": "apiKey",
+            "name": "Authorization",
+            "in": "header"
         }
     }
 }`

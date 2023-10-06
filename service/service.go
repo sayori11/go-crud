@@ -1,6 +1,9 @@
 package service
 
-import "server/model"
+import (
+	"server/model"
+	"server/view"
+)
 
 type IProductService interface {
 	GetProducts() ([]model.Product, error)
@@ -12,5 +15,5 @@ type IProductService interface {
 
 type IUserService interface {
 	Register(model.User) (model.User, error)
-	Login(model.UserCreate) (string, error)
+	Login(view.UserCreate) (string, error)
 }

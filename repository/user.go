@@ -3,6 +3,7 @@ package repository
 import (
 	"errors"
 	"server/model"
+	"server/view"
 
 	"golang.org/x/crypto/bcrypt"
 )
@@ -16,7 +17,7 @@ func (repo *PGRepository) CreateUser(user model.User) (model.User, error) {
 	return user, nil
 }
 
-func (repo *PGRepository) ValidateUser(user model.UserCreate) (model.User, error) {
+func (repo *PGRepository) ValidateUser(user view.UserCreate) (model.User, error) {
 	db := repo.DB
 	userDB := model.User{}
 	if result := db.First(&userDB, "username = ?", user.Username); result.Error != nil {
